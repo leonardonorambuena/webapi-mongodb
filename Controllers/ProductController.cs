@@ -11,9 +11,13 @@ namespace mongotest.Controllers
     [Route("api/[controller]")]
     public class ProductController : Controller
     {
-        ProductDal _productDAL = new ProductDal();
-        
-        
+        readonly ProductDal _productDAL;
+
+        public ProductController(ProductDal producDal)
+        {
+            _productDAL = producDal;
+        }
+
         [HttpGet]
         public IEnumerable<Product> getAll() => _productDAL.All();
         

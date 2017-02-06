@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using mongotest.Data;
 
 namespace mongotest
 {
@@ -28,6 +29,7 @@ namespace mongotest
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
+            services.AddTransient<ProductDal>();
             services.AddMvc();
         }
 
@@ -56,5 +58,6 @@ namespace mongotest
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
+
     }
 }

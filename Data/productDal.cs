@@ -13,8 +13,8 @@ namespace mongotest.Data{
         private IMongoCollection<Product> _collection;
 
         public ProductDal(){
-            this._db = Connect();
-            this._collection = this._db.GetCollection<Product>("products");
+            _db = Connect();
+            _collection = _db.GetCollection<Product>("products");
         }
 
         private IMongoDatabase Connect(){
@@ -26,24 +26,24 @@ namespace mongotest.Data{
 
 
         public IEnumerable<Product> All(){
-            var product = this._collection.Find(new BsonDocument()).ToListAsync();
+            var product = _collection.Find(new BsonDocument()).ToListAsync();
             return product.Result;
         }
 
         public Product Find(string id)
         {
             try{
-                return this._collection.Find(d => d.id == id).FirstOrDefault();
+                return _collection.Find(d => d.id == id).FirstOrDefault();
             }catch(Exception e){
-                return null;
+                throw e;
             }
             
         }
 
         public bool Remove(string id){
             var product = this.Find(id);
-            if(id != null) {
-               this._collection.DeleteOne(product.ToBsonDocument());
+            if(product != null) {
+               _collection.DeleteOne(product.ToBsonDocument());
                return true;
             }
             return false;
@@ -52,11 +52,11 @@ namespace mongotest.Data{
         public bool Save(Product model)
         {
             try{
-                this._collection.InsertOne(model);
+                _collection.InsertOne(model);
                 return true;
             }catch(Exception e)
             {
-                return false;
+                throw e;
             }
             
         }
@@ -64,11 +64,11 @@ namespace mongotest.Data{
         public bool Update(Product model)
         {
             try{
-                this._collection.UpdateOne(p => p.id == model.id, new BsonDocument {{"$set", model.ToBsonDocument()}});
+                _collection.UpdateOne(p => p.id == model.id, new BsonDocument {{"$set", model.ToBsonDocument()}});
                 return true;
             }catch(Exception e)
             {
-                return false;
+                throw e;
             }
             
         }
